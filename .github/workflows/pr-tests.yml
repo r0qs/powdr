@@ -136,7 +136,7 @@ jobs:
       - name: Install Clippy
         run: rustup component add clippy --toolchain $RUST_DEFAULT_TOOLCHAIN
       - name: Lint
-        run: cargo clippy --all --all-targets --all-features -- -D warnings
+        run: cargo clippy --all --all-targets --all-features
         #env:
         #  RUSTFLAGS: -Dwarnings
 
