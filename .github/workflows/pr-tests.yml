@@ -10,7 +10,6 @@ env:
   CARGO_TERM_COLOR: always
   RUST_DEFAULT_TOOLCHAIN: "1.72-x86_64-unknown-linux-gnu"
   RUST_NIGHTLY_TOOLCHAIN: "nightly-2023-01-03-x86_64-unknown-linux-gnu"
-  PILCOM_CACHE_KEY: v0-${{ runner.os }}-pilcom-node-cache
 
 jobs:
   setup-rust:
@@ -47,7 +46,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/pilcom
-          key: ${{ env.PILCOM_CACHE_KEY }}
+          key: v0-${{ runner.os }}-pilcom-node-cache
       - name: Install pilcom
         if: steps.cache-pilcom.outputs.cache-hit != 'true'
         run: |
@@ -93,7 +92,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/pilcom
-          key: ${{ env.PILCOM_CACHE_KEY }}
+          key: v0-${{ runner.os }}-pilcom-node-cache
       - name: Run default tests
         run: cargo test --all --all-features --profile pr-tests --verbose
         env:
@@ -114,7 +113,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/pilcom
-          key: ${{ env.PILCOM_CACHE_KEY }}
+          key: v0-${{ runner.os }}-pilcom-node-cache
       - name: Run slow tests
         # Number threads is set to 1 because the runner does not have enough memory for more.
         run: cargo test --all --all-features --profile pr-tests --verbose -- --ignored --nocapture --test-threads=1 --exact test_keccak test_vec_median instruction_tests::addi test_many_chunks
