@@ -45,7 +45,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/pilcom/node_modules
+            $GITHUB_WORKSPACE/pilcom/node_modules
           key: ${{ runner.os }}-pilcom-node-modules
       - name: Install pilcom
         if: steps.cache-pilcom.outputs.cache-hit != 'true'
