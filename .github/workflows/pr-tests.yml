@@ -32,7 +32,7 @@ jobs:
         shell: bash
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: "v0-rust-${{ steps.rustc-version.outputs.cachekey }}"
+          shared-key: "${{ steps.rustc-version.outputs.cachekey }}"
           cache-on-failure: true
 
   pilcom:
@@ -63,7 +63,7 @@ jobs:
           submodules: recursive
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: "v0-rust-${{ steps.rustc-version.outputs.cachekey }}"
+          shared-key: "${{ steps.rustc-version.outputs.cachekey }}"
           cache-on-failure: true
       - name: Build
         run: cargo build --bins --tests --benches --all --all-features --profile pr-tests
