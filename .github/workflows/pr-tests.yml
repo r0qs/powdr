@@ -26,8 +26,8 @@ jobs:
       - name: Create cache key
         id: rustc-version
         run: |
-          DATE=$(rustc +${{ env.TOOLCHAIN }} --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
-          HASH=$(rustc +${{ env.TOOLCHAIN }} --version --verbose | sed -ne 's/^commit-hash: //p')
+          DATE=$(rustc +$RUSTC_DEFAULT_TOOLCHAIN --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+          HASH=$(rustc +$RUSTC_DEFAULT_TOOLCHAIN --version --verbose | sed -ne 's/^commit-hash: //p')
           echo "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT
         shell: bash
       - uses: Swatinem/rust-cache@v2
