@@ -8,8 +8,8 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  RUST_DEFAULT_TOOLCHAIN: 1.72-x86_64-unknown-linux-gnu
-  RUST_NIGHTLY_TOOLCHAIN: nightly-2023-01-03-x86_64-unknown-linux-gnu
+  RUST_DEFAULT_TOOLCHAIN: "1.72-x86_64-unknown-linux-gnu"
+  RUST_NIGHTLY_TOOLCHAIN: "nightly-2023-01-03-x86_64-unknown-linux-gnu"
 
 jobs:
   rust:
@@ -26,8 +26,8 @@ jobs:
       - name: Create cache key
         id: rustc-version
         run: |
-          DATE=$(rustc +$RUSTC_DEFAULT_TOOLCHAIN --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
-          HASH=$(rustc +$RUSTC_DEFAULT_TOOLCHAIN --version --verbose | sed -ne 's/^commit-hash: //p')
+          DATE=$(rustc $RUSTC_DEFAULT_TOOLCHAIN --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+          HASH=$(rustc $RUSTC_DEFAULT_TOOLCHAIN --version --verbose | sed -ne 's/^commit-hash: //p')
           echo "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT
         shell: bash
       - uses: Swatinem/rust-cache@v2
