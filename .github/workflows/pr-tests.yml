@@ -62,7 +62,7 @@ jobs:
       - name: Run default tests
         run: cargo test --all --all-features --profile pr-tests --verbose
         env:
-          PILCOM: $(pwd)/pilcom/
+          PILCOM: ${{ github.workspace }}/pilcom/
 
   slow-test:
     runs-on: ubuntu-latest
@@ -75,7 +75,7 @@ jobs:
         # Number threads is set to 1 because the runner does not have enough memory for more.
         run: cargo test --all --all-features --profile pr-tests --verbose -- --ignored --nocapture --test-threads=1 --exact test_keccak test_vec_median instruction_tests::addi test_many_chunks
         env:
-          PILCOM: $(pwd)/pilcom/
+          PILCOM: ${{ github.workspace }}/pilcom/
 
   bench-check:
     runs-on: ubuntu-latest
@@ -84,6 +84,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+      - uses: Swatinem/rust-cache@v2
       - name: Check benches compile without running them
         run: cargo bench --all --all-features --profile pr-tests --no-run
       - name: Check without Halo2
@@ -95,6 +96,9 @@ jobs:
     needs: rust
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: Swatinem/rust-cache@v2
       - name: Install Clippy
         run: rustup component add clippy --toolchain 1.72-x86_64-unknown-linux-gnu
       - name: Lint
@@ -107,6 +111,9 @@ jobs:
     needs: rust
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: Swatinem/rust-cache@v2
       - name: Install rustfmt
         run: rustup component add rustfmt --toolchain 1.72-x86_64-unknown-linux-gnu
       - name: Format
