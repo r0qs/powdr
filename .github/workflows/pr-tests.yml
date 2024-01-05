@@ -46,7 +46,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ${{ env.GITHUB_WORKSPACE }}/pilcom/node_modules
+            ${{ github.workspace }}/pilcom/node_modules
           key: ${{ runner.os }}-pilcom-node-modules
       - name: Install pilcom
         if: steps.cache-pilcom.outputs.cache-hit != 'true'
@@ -88,7 +88,7 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: |
-            ${{ env.GITHUB_WORKSPACE }}/pilcom/node_modules
+            ${{ github.workspace }}/pilcom/node_modules
           key: ${{ runner.os }}-pilcom-node-modules
       - name: Run default tests
         run: cargo test --all --all-features --profile pr-tests --verbose
@@ -109,7 +109,7 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: |
-            ${{ env.GITHUB_WORKSPACE }}/pilcom/node_modules
+            ${{ github.workspace }}/pilcom/node_modules
           key: ${{ runner.os }}-pilcom-node-modules
       - name: Run slow tests
         # Number threads is set to 1 because the runner does not have enough memory for more.
