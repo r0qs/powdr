@@ -34,6 +34,7 @@ jobs:
         shell: bash
       - uses: Swatinem/rust-cache@v2
         with:
+          prefix-key: "v0-rust-$RUSTC_DEFAULT_TOOLCHAIN"
           shared-key: "${{ steps.rustc-version.outputs.cachekey }}"
           cache-on-failure: true
 
@@ -45,7 +46,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            $GITHUB_WORKSPACE/pilcom/node_modules
+            ${{ env.GITHUB_WORKSPACE }}/pilcom/node_modules
           key: ${{ runner.os }}-pilcom-node-modules
       - name: Install pilcom
         if: steps.cache-pilcom.outputs.cache-hit != 'true'
@@ -65,6 +66,7 @@ jobs:
           submodules: recursive
       - uses: Swatinem/rust-cache@v2
         with:
+          prefix-key: "v0-rust-$RUSTC_DEFAULT_TOOLCHAIN"
           shared-key: "${{ needs.setup-rust.outputs.cache-shared-key }}"
           cache-on-failure: true
       - name: Build
@@ -79,12 +81,14 @@ jobs:
           submodules: recursive
       - uses: Swatinem/rust-cache@v2
         with:
-          save-if: false
+          prefix-key: "v0-build-$RUSTC_DEFAULT_TOOLCHAIN"
+          shared-key: "${{ needs.setup-rust.outputs.cache-shared-key }}"
+          cache-on-failure: true
       - name: Restore pilcom cache
         uses: actions/cache/restore@v3
         with:
           path: |
-            $GITHUB_WORKSPACE/pilcom/node_modules
+            ${{ env.GITHUB_WORKSPACE }}/pilcom/node_modules
           key: ${{ runner.os }}-pilcom-node-modules
       - name: Run default tests
         run: cargo test --all --all-features --profile pr-tests --verbose
@@ -105,7 +109,7 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: |
-            $GITHUB_WORKSPACE/pilcom/node_modules
+            ${{ env.GITHUB_WORKSPACE }}/pilcom/node_modules
           key: ${{ runner.os }}-pilcom-node-modules
       - name: Run slow tests
         # Number threads is set to 1 because the runner does not have enough memory for more.
