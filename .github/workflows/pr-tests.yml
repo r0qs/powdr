@@ -12,8 +12,10 @@ env:
   RUST_NIGHTLY_TOOLCHAIN: "nightly-2023-01-03-x86_64-unknown-linux-gnu"
 
 jobs:
-  rust:
+  setup-rust:
     runs-on: ubuntu-latest
+    outputs:
+      cache-shared-key: ${{ steps.rustc-version.outputs.cachekey }}
     steps:
       - name: Install Rust toolchain ${{ env.RUST_DEFAULT_TOOLCHAIN }}
         run: rustup toolchain install $RUST_DEFAULT_TOOLCHAIN
@@ -55,7 +57,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs:
-      - rust
+      - setup-rust
       - pilcom
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +65,7 @@ jobs:
           submodules: recursive
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: "${{ steps.rustc-version.outputs.cachekey }}"
+          shared-key: "${{ needs.setup-rust.outputs.cache-shared-key }}"
           cache-on-failure: true
       - name: Build
         run: cargo build --bins --tests --benches --all --all-features --profile pr-tests
@@ -113,7 +115,7 @@ jobs:
 
   bench-check:
     runs-on: ubuntu-latest
-    needs: rust
+    needs: setup-rust
     steps:
       - uses: actions/checkout@v4
         with:
@@ -127,7 +129,7 @@ jobs:
 
   clippy:
     runs-on: ubuntu-latest
-    needs: rust
+    needs: setup-rust
     steps:
       - uses: actions/checkout@v4
         with:
@@ -142,7 +144,7 @@ jobs:
 
   fmt:
     runs-on: ubuntu-latest
-    needs: rust
+    needs: setup-rust
     steps:
       - uses: actions/checkout@v4
         with:
