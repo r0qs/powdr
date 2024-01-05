@@ -11,7 +11,7 @@ env:
   RUST_DEFAULT_TOOLCHAIN: "1.72-x86_64-unknown-linux-gnu"
   RUST_NIGHTLY_TOOLCHAIN: "nightly-2023-01-03-x86_64-unknown-linux-gnu"
   PILCOM_CACHE_KEY: v0-${{ runner.os }}-pilcom-node-cache
-4
+
 jobs:
   setup-rust:
     runs-on: ubuntu-latest
