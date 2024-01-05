@@ -10,10 +10,10 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  setup-rust:
+  rust:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Rust toolchain 1.72 (with clippy and rustfmt)
+      - name: Install Rust toolchain 1.72
         run: rustup toolchain install 1.72-x86_64-unknown-linux-gnu
       - name: Install nightly
         run: rustup toolchain install nightly-2023-01-03-x86_64-unknown-linux-gnu
@@ -43,7 +43,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs:
-      - setup-rust
+      - rust
       - pilcom
     steps:
       - uses: actions/checkout@v4
@@ -79,7 +79,7 @@ jobs:
 
   bench-check:
     runs-on: ubuntu-latest
-    needs: build
+    needs: rust
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,9 +91,8 @@ jobs:
 
 
   clippy:
-    name: clippy
     runs-on: ubuntu-latest
-    needs: build
+    needs: rust
     steps:
       - uses: actions/checkout@v4
       - name: Install Clippy
@@ -104,9 +103,8 @@ jobs:
           RUSTFLAGS: -Dwarnings
 
   fmt:
-    name: fmt
     runs-on: ubuntu-latest
-    needs: build
+    needs: rust
     steps:
       - uses: actions/checkout@v4
       - name: Install rustfmt
